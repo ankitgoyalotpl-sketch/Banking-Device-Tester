@@ -16,7 +16,7 @@ const StatusPage = () => {
         setResult(null);
 
         try {
-            const res = await fetch(`http://localhost:3001/api/complaint/status/${searchId}`);
+            const res = await fetch(`/api/complaint/status/${searchId}`);
             const data = await res.json();
             
             if (data.status === 'success' && data.data) {

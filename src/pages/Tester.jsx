@@ -4,7 +4,7 @@ import { Terminal, ShieldAlert, CheckCircle2, AlertCircle, Loader2, Navigation, 
 
 const TOTAL_TEST_TIME = 10 * 60 * 1000;
 const ANTENNA_SUGGESTION_TIME = 3 * 60 * 1000;
-const API_ENDPOINT = 'http://localhost:3001/api/device';
+const API_ENDPOINT = '/api/device';
 const SBI_MAGIC_STRING = "ID0BMDQD5CpCxCtCmByBsBKD7C2CpCwCJDMD6BECVBgCbC6CbCsBPCDDzByCsCKDCDQDPDZChCaBACqBCCDC8BKC1BACMCOCNCECVBoCpC0ChC1CLD7C3CrCrBOCOCPCGCpBzBwB4BrB8BHCwBzBnCuC3CODOD5CYC1CaBACoB4BKC8BSDFD";
 
 const TesterPage = () => {

@@ -20,7 +20,7 @@ const ComplaintPage = () => {
         };
 
         try {
-            const res = await fetch('http://localhost:3001/api/complaint', {
+            const res = await fetch('/api/complaint', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
