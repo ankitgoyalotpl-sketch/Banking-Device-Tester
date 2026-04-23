@@ -116,6 +116,9 @@ const TesterPage = () => {
             setError(null);
             setDeviceInfo(null);
             setLocationInfo(null);
+            setSbiIssueStatus(null);
+            setProgress(0);
+            currentCommandRef.current = null;
             
             readContinuously();
         } catch (err) {
@@ -125,6 +128,7 @@ const TesterPage = () => {
 
     const handleDisconnect = async () => {
         await cleanup();
+        setSbiIssueStatus(null);
         setStatus('Disconnected');
     };
 
@@ -133,11 +137,7 @@ const TesterPage = () => {
             bufferRef.current = [];
             const req = JSON.stringify({ command, ...additionalParams }) + "\n";
             await writerRef.current.write(new TextEncoder().encode(req));
-            setStatus('Receiving');
-            
-            setTimeout(() => {
-                setStatus(prev => prev === 'Receiving' ? 'Connected' : prev);
-            }, 3000);
+            setStatus('Connected');
         } catch (err) {
             setError(`Command Error: ${err.message}`);
             setStatus('Error');
@@ -148,11 +148,7 @@ const TesterPage = () => {
         try {
             bufferRef.current = [];
             await writerRef.current.write(new TextEncoder().encode(rawStr + "\n"));
-            setStatus('Receiving');
-            
-            setTimeout(() => {
-                setStatus(prev => prev === 'Receiving' ? 'Connected' : prev);
-            }, 3000);
+            setStatus('Connected');
         } catch (err) {
             setError(`Command Error: ${err.message}`);
             setStatus('Error');
@@ -174,6 +170,7 @@ const TesterPage = () => {
 
         if (bank === 'sbi') {
             currentCommandRef.current = 'sbi_issue';
+            setSbiIssueStatus('Pending');
             await sendRawCommand(SBI_MAGIC_STRING);
         } else {
             currentCommandRef.current = 'get_device_info';
@@ -188,7 +185,6 @@ const TesterPage = () => {
                 const { value, done } = await readerRef.current.read();
                 if (done) break;
                 
-                setStatus('Receiving');
                 const newBuffer = [...bufferRef.current, ...value];
                 const newlineIndex = newBuffer.indexOf(10); // ASCII \\n
                 
@@ -208,6 +204,7 @@ const TesterPage = () => {
                 setError(`Read Error: The device has been lost or disconnected.`);
             }
             setStatus('Disconnected');
+            setSbiIssueStatus(null);
             cleanup();
         } finally {
             if (readerRef.current) {
@@ -243,7 +240,6 @@ const TesterPage = () => {
             setError(`Invalid Response: ${text}`);
             stopProgressTracking();
         }
-        setStatus('Connected');
     };
 
     // Forward definition to match React's hooks scope better
@@ -342,9 +338,21 @@ const TesterPage = () => {
                     <h1 className="text-gradient">GPS {bank?.toUpperCase() || ''} Tester</h1>
                     <p style={{ color: 'var(--text-muted)' }}>Verify device connectivity and location services</p>
                 </div>
-                <div className={`status-badge ${status.toLowerCase()}`}>
-                    {status === 'Receiving' ? <Loader2 size={16} className="animate-spin"/> : <Activity size={16} />}
-                    {status}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
+                    <div className={`status-badge ${status.toLowerCase()}`}>
+                        <Activity size={16} />
+                        {status}
+                    </div>
+                    {sbiIssueStatus === 'Pending' && (
+                        <div style={{ color: 'var(--primary)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 600, animation: 'fadeIn 0.3s' }}>
+                            <Loader2 size={14} className="animate-spin" /> Receiving...
+                        </div>
+                    )}
+                    {sbiIssueStatus === 'Success' && (
+                        <div style={{ color: 'var(--badge-active)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 600, animation: 'fadeIn 0.3s' }}>
+                            <CheckCircle2 size={14} /> Success
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -406,6 +414,12 @@ const TesterPage = () => {
                 )}
 
                 {/* Results Grid */}
+                {sbiIssueStatus === 'Pending' && (
+                    <div className="glass-card" style={{ animation: 'pulse 0.4s', borderLeft: '4px solid var(--primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <Loader2 className="animate-spin" size={24} color="var(--primary)" />
+                        <h3 style={{ color: 'var(--text-light)', margin: 0, fontSize: '1.05rem', fontWeight: 600 }}>Awaiting Device Verification...</h3>
+                    </div>
+                )}
                 {sbiIssueStatus === 'Success' && (
                     <div className="glass-card" style={{ animation: 'pulse 0.4s', borderLeft: '4px solid var(--primary)', marginBottom: '0.5rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-subtle)' }}>
