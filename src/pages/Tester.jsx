@@ -287,7 +287,7 @@ const TesterPage = () => {
                 
                 // Background Poller Listener!
                 if (networkStatusRef.current === 'Checking' && (text.includes("ID0B") || text.includes("BMDQ") || text.includes("Success"))) {
-                     if (text.length > 35) {
+                     if (text.length > 300) {
                          setNetworkStatus('Detected');
                          setDebugText(text);
                          networkStatusRef.current = 'Detected';
