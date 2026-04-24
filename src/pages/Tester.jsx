@@ -181,10 +181,11 @@ const TesterPage = () => {
         
         networkTimeoutRef.current = setTimeout(async () => {
             if (networkStatusRef.current === 'Checking') {
-                await sendRawCommand(SBI_MAGIC_STRING);
+                currentCommandRef.current = 'get_location';
+                await sendCommand('get_location');
                 pollNetworkContinuously();
             }
-        }, 3000);
+        }, 4000); // 4 seconds ping interval for JSON
     };
 
     const handleRunTest = async () => {
@@ -292,17 +293,6 @@ const TesterPage = () => {
         } catch (e) {
             if (bank === 'sbi' && !text.trim().startsWith('{')) {
                 console.log("Ignored non-json string for SBI trailing chunk:", text);
-                
-                // Background Poller Listener!
-                if (networkStatusRef.current === 'Checking') {
-                     setDebugText(`Last: ${text.length}b | ${text.substring(0, 30)}...`);
-                     
-                     if ((text.includes("ID0B") || text.includes("BMDQ") || text.includes("Success")) && text.length > 300) {
-                         setNetworkStatus('Detected');
-                         networkStatusRef.current = 'Detected';
-                         if (networkTimeoutRef.current) clearTimeout(networkTimeoutRef.current);
-                     }
-                }
                 return;
             }
             setError(`Invalid Response: ${text}`);
@@ -357,6 +347,14 @@ const TesterPage = () => {
             
         if (isValid) {
             setLocationInfo(response.data);
+            
+            if (networkStatusRef.current === 'Checking') {
+                setNetworkStatus('Detected');
+                networkStatusRef.current = 'Detected';
+                setDebugText("");
+                if (networkTimeoutRef.current) clearTimeout(networkTimeoutRef.current);
+            }
+            
             setShowTimeAlert(false);
             stopLocationChecking();
             stopProgressTracking();
