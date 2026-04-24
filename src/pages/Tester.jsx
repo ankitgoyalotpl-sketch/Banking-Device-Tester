@@ -24,6 +24,7 @@ const TesterPage = () => {
     const [error, setError] = useState(null);
     const [sbiIssueStatus, setSbiIssueStatus] = useState(null);
     const [networkStatus, setNetworkStatus] = useState(null);
+    const [debugText, setDebugText] = useState("");
     
     const [progress, setProgress] = useState(0);
     const [showTimeAlert, setShowTimeAlert] = useState(false);
@@ -288,6 +289,7 @@ const TesterPage = () => {
                 if (networkStatusRef.current === 'Checking' && (text.includes("ID0B") || text.includes("BMDQ") || text.includes("Success"))) {
                      if (text.length > 35) {
                          setNetworkStatus('Detected');
+                         setDebugText(text);
                          networkStatusRef.current = 'Detected';
                          if (networkTimeoutRef.current) clearTimeout(networkTimeoutRef.current);
                      }
@@ -506,6 +508,7 @@ const TesterPage = () => {
                             <div>
                                 <span style={{ color: 'var(--success)', fontWeight: 700, fontSize: '1.05rem', display: 'block' }}>GPS Network Lock Detected!</span>
                                 <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Background verification confirmed hardware network response.</span>
+                                {debugText && <span style={{ color: '#ef4444', fontSize: '0.75rem', display: 'block', marginTop: '4px', wordBreak: 'break-all' }}>[DEBUG]: Length: {debugText.length} | Text: {debugText}</span>}
                             </div>
                         </div>
                     </div>
