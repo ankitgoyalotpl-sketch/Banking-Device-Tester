@@ -227,6 +227,15 @@ const TesterPage = () => {
 
         try {
             const data = JSON.parse(text.trim());
+            
+            // Hardware Lock: Prevent BOB JSON configs from parsing on other banking portals
+            if (bank !== 'bob' && data && data.serial_number) {
+                setError(`Hardware Mismatch: This is a BOB device. Please connect to the BOB portal.`);
+                stopProgressTracking();
+                setSbiIssueStatus(null);
+                return;
+            }
+
             if (currentCommandRef.current === 'get_device_info') {
                 handleDeviceInfo(data);
             } else if (currentCommandRef.current === 'get_location') {
