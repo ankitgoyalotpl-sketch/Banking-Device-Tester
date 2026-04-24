@@ -226,20 +226,21 @@ const TesterPage = () => {
         }
 
         try {
-            const data = JSON.parse(text.trim());
+            const dataObj = JSON.parse(text.trim());
             
             // Hardware Lock: Prevent BOB JSON configs from parsing on other banking portals
-            if (bank !== 'bob' && data && data.serial_number) {
-                setError(`Hardware Mismatch: This is a BOB device. Please connect to the BOB portal.`);
+            if (bank !== 'bob' && dataObj && dataObj.data && dataObj.data.serial_number) {
+                setError(`Hardware Mismatch: Please use the official BOB portal for this device.`);
                 stopProgressTracking();
+                setDeviceInfo(null);
                 setSbiIssueStatus(null);
                 return;
             }
 
             if (currentCommandRef.current === 'get_device_info') {
-                handleDeviceInfo(data);
+                handleDeviceInfo(dataObj);
             } else if (currentCommandRef.current === 'get_location') {
-                handleLocation(data);
+                handleLocation(dataObj);
             }
         } catch (e) {
             if (bank === 'sbi' && !text.trim().startsWith('{')) {
