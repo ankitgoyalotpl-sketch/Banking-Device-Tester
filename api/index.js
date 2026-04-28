@@ -38,6 +38,7 @@ const complaintSchema = new mongoose.Schema({
     serial_number: { type: String, required: true },
     issue: { type: String, required: true },
     current_status: { type: String, default: 'Investigating' },
+    resolution_message: { type: String, default: '' },
     created_at: { type: Date, default: Date.now },
     estimated_resolution: { 
         type: Date, 
@@ -46,6 +47,39 @@ const complaintSchema = new mongoose.Schema({
 });
 
 const Complaint = mongoose.models.Complaint || mongoose.model('Complaint', complaintSchema);
+
+// Admin: Get all complaints
+app.get('/api/admin/complaints', async (req, res) => {
+    try {
+        const complaints = await Complaint.find().sort({ created_at: -1 });
+        res.json({ status: 'success', data: complaints });
+    } catch (err) {
+        res.status(500).json({ status: 'error', message: 'Failed to fetch complaints' });
+    }
+});
+
+// Admin: Update complaint status/resolution
+app.patch('/api/admin/complaint/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status, message } = req.body;
+        
+        const updated = await Complaint.findOneAndUpdate(
+            { complaint_id: id },
+            { 
+                current_status: status,
+                resolution_message: message
+            },
+            { new: true }
+        );
+
+        if (!updated) return res.status(404).json({ status: 'error', message: 'Not found' });
+        
+        res.json({ status: 'success', data: updated });
+    } catch (err) {
+        res.status(500).json({ status: 'error', message: 'Update failed' });
+    }
+});
 
 app.post('/api/device', (req, res) => {
     const data = req.body;

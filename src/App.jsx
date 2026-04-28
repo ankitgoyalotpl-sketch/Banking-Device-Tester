@@ -4,6 +4,7 @@ import HomePage from './pages/Home';
 import TesterPage from './pages/Tester';
 import ComplaintPage from './pages/Complaint';
 import StatusPage from './pages/Status';
+import AdminPage from './pages/Admin';
 import React, { useState, useEffect } from 'react';
 
 const SmartLogo = ({ src }) => {
@@ -180,6 +181,7 @@ function App() {
           <Route path="/tester/:bank?" element={<TesterPage />} />
           <Route path="/complaint" element={<ComplaintPage />} />
           <Route path="/status" element={<StatusPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </main>
 
