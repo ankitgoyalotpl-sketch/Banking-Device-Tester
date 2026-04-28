@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +7,6 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
-
 <body>
     <!-- Header -->
     <header class="site-header">
@@ -21,8 +19,7 @@
                     <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="Driver-for-USB-GPS-8.0.zip"><i class="fas fa-tools"></i> Driver Download</a></li>
                     <li><a href="file_complaint.php"><i class="fas fa-file-alt"></i> Create Complaint</a></li>
-                    <li><a href="check_complaint_status.php"><i class="fas fa-search"></i> Check Complaint Status</a>
-                    </li>
+                    <li><a href="check_complaint_status.php"><i class="fas fa-search"></i> Check Complaint Status</a></li>
                     <li><a href="#" id="contactLink"><i class="fas fa-envelope"></i> Contact</a></li>
                 </ul>
             </nav>
@@ -44,20 +41,20 @@
                         </div>
                         <div class="contact-details">
                             <h3>Phone</h3>
-                            <p>+91-9024146923</p>
+                            <p>+91-8306006902, 8306006903</p>
                         </div>
                     </div>
-
+                    
                     <div class="contact-item">
                         <div class="contact-icon">
                             <i class="fas fa-envelope"></i>
                         </div>
                         <div class="contact-details">
                             <h3>Email</h3>
-                            <p>goyalankit9646@gmail.com</p>
+                            <p>info@raivens.com</p>
                         </div>
                     </div>
-
+                    
                     <div class="contact-item">
                         <div class="contact-icon">
                             <i class="fas fa-clock"></i>
@@ -84,22 +81,19 @@
                     <span><i class="fas fa-info-circle"></i> Support ID: GPS-TEST-8.0</span>
                 </div>
             </div>
-
+            
             <div class="content-wrapper">
                 <div class="control-panel">
-                    <button id="connectButton" class="btn btn-primary"><i class="fas fa-plug"></i> Connect
-                        Device</button>
-                    <button id="disconnectButton" class="btn btn-danger" disabled><i class="fas fa-times-circle"></i>
-                        Disconnect</button>
-                    <button id="runTestButton" class="btn btn-success" disabled><i class="fas fa-play-circle"></i> Run
-                        Device Test</button>
+                    <button id="connectButton" class="btn btn-primary"><i class="fas fa-plug"></i> Connect Device</button>
+                    <button id="disconnectButton" class="btn btn-danger" disabled><i class="fas fa-times-circle"></i> Disconnect</button>
+                    <button id="runTestButton" class="btn btn-success" disabled><i class="fas fa-play-circle"></i> Run Device Test</button>
                 </div>
-
+                
                 <div class="status-panel">
                     <div class="status-panel-title"><i class="fas fa-broadcast-tower"></i> Device Status:</div>
                     <div class="status-indicator" id="statusIndicator">Disconnected</div>
                 </div>
-
+                
                 <div class="test-results" id="testResults">
                     <div class="test-header">
                         <i class="fas fa-clipboard-check"></i> Test Results
@@ -108,9 +102,7 @@
                         <div id="deviceInfoSection"></div>
                         <div id="locationInfoSection"></div>
                         <div id="timeAlertSection" class="time-alert">
-                            <i class="fas fa-exclamation-triangle"></i> <strong>Suggestion:</strong> Please connect an
-                            external antenna if you have one, or place the device outside or near a window where clear
-                            sky is visible.
+                            <i class="fas fa-exclamation-triangle"></i> <strong>Suggestion:</strong> Please connect an external antenna if you have one, or place the device outside or near a window where clear sky is visible.
                         </div>
                         <div class="progress-container">
                             <div class="progress-bar" id="progressBar">
@@ -120,7 +112,7 @@
                         <div id="errorSection"></div>
                     </div>
                 </div>
-
+                
                 <!-- Connection Instructions Card -->
                 <div class="connection-instructions-card">
                     <div class="card-header">
@@ -135,11 +127,10 @@
                                 <div class="step-details">
                                     <div class="step-number">Step 1</div>
                                     <div class="step-title">Connect your GPS device</div>
-                                    <div class="step-description">Plug your GPS8.0 device into an available USB port on
-                                        your computer.</div>
+                                    <div class="step-description">Plug your GPS8.0 device into an available USB port on your computer.</div>
                                 </div>
                             </div>
-
+                            
                             <div class="instruction-step">
                                 <div class="step-icon">
                                     <i class="fas fa-plug"></i>
@@ -147,11 +138,10 @@
                                 <div class="step-details">
                                     <div class="step-number">Step 2</div>
                                     <div class="step-title">Click "Connect Device" button</div>
-                                    <div class="step-description">After clicking, a popup will appear asking you to
-                                        select a serial port.</div>
+                                    <div class="step-description">After clicking, a popup will appear asking you to select a serial port.</div>
                                 </div>
                             </div>
-
+                            
                             <div class="instruction-step">
                                 <div class="step-icon">
                                     <i class="fas fa-list-ul"></i>
@@ -159,11 +149,10 @@
                                 <div class="step-details">
                                     <div class="step-number">Step 3</div>
                                     <div class="step-title">Select the correct port</div>
-                                    <div class="step-description">Choose <strong>"USB Serial"</strong> or <strong>"USB
-                                            Serial CH340"</strong> from the list of available ports.</div>
+                                    <div class="step-description">Choose <strong>"USB Serial"</strong> or <strong>"USB Serial CH340"</strong> from the list of available ports.</div>
                                 </div>
                             </div>
-
+                            
                             <div class="instruction-step">
                                 <div class="step-icon">
                                     <i class="fas fa-play-circle"></i>
@@ -171,8 +160,7 @@
                                 <div class="step-details">
                                     <div class="step-number">Step 4</div>
                                     <div class="step-title">Click "Run Device Test"</div>
-                                    <div class="step-description">After connecting successfully, click the Run Device
-                                        Test button to begin testing your GPS device.</div>
+                                    <div class="step-description">After connecting successfully, click the Run Device Test button to begin testing your GPS device.</div>
                                 </div>
                             </div>
                         </div>
@@ -181,7 +169,7 @@
             </div>
         </div>
     </main>
-
+    
     <!-- Simple Footer -->
     <footer class="simple-footer">
         <div class="footer-container">
@@ -190,361 +178,359 @@
             </div>
         </div>
     </footer>
-
+    
     <style>
-        /* Connection Instructions Card Styles */
-        .connection-instructions-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 30px 0;
-            overflow: hidden;
-        }
-
-        .connection-instructions-card .card-header {
-            background-color: #3498db;
-            color: white;
-            padding: 15px 20px;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .connection-instructions-card .card-header i {
-            margin-right: 10px;
-        }
-
-        .connection-instructions-card .card-content {
-            padding: 20px;
-        }
-
-        .instruction-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
+    /* Connection Instructions Card Styles */
+    .connection-instructions-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin: 30px 0;
+        overflow: hidden;
+    }
+    
+    .connection-instructions-card .card-header {
+        background-color: #3498db;
+        color: white;
+        padding: 15px 20px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    .connection-instructions-card .card-header i {
+        margin-right: 10px;
+    }
+    
+    .connection-instructions-card .card-content {
+        padding: 20px;
+    }
+    
+    .instruction-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .instruction-step {
+        display: flex;
+        align-items: flex-start;
+        padding: 15px;
+        border-radius: 6px;
+        background-color: #f8f9fa;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .instruction-step:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .step-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background-color: #3498db;
+        border-radius: 50%;
+        color: white;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+    
+    .step-icon i {
+        font-size: 20px;
+    }
+    
+    .step-details {
+        flex: 1;
+    }
+    
+    .step-number {
+        color: #3498db;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    
+    .step-title {
+        font-weight: 600;
+        font-size: 18px;
+        margin-bottom: 6px;
+        color: #333;
+    }
+    
+    .step-description {
+        color: #666;
+        line-height: 1.5;
+    }
+    
+    @media (max-width: 768px) {
         .instruction-step {
-            display: flex;
-            align-items: flex-start;
-            padding: 15px;
-            border-radius: 6px;
-            background-color: #f8f9fa;
-            transition: transform 0.2s, box-shadow 0.2s;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
-
-        .instruction-step:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
+        
         .step-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background-color: #3498db;
-            border-radius: 50%;
-            color: white;
-            margin-right: 15px;
-            flex-shrink: 0;
+            margin-right: 0;
+            margin-bottom: 15px;
         }
+    }
 
-        .step-icon i {
-            font-size: 20px;
+    /* Contact Popup Styles */
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .popup-container {
+        background-color: #fff;
+        width: 90%;
+        max-width: 500px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        animation: popup-fade-in 0.3s ease;
+    }
+
+    @keyframes popup-fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
         }
-
-        .step-details {
-            flex: 1;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-        .step-number {
-            color: #3498db;
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 4px;
+    .popup-header {
+        background-color: #3498db;
+        color: white;
+        padding: 15px 20px;
+        font-size: 18px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .popup-header i {
+        margin-right: 10px;
+    }
+
+    .popup-close {
+        font-size: 24px;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .popup-close:hover {
+        color: #f1f1f1;
+    }
+
+    .popup-content {
+        padding: 25px;
+    }
+
+    .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .contact-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        background-color: #3498db;
+        border-radius: 50%;
+        color: white;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .contact-icon i {
+        font-size: 18px;
+    }
+
+    .contact-details h3 {
+        font-size: 16px;
+        margin: 0 0 5px 0;
+        color: #333;
+    }
+
+    .contact-details p {
+        margin: 0;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    /* Bank Selection Modal Styles */
+    .bank-selection-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .bank-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        min-height: 120px;
+        justify-content: center;
+    }
+
+    .bank-option:hover {
+        border-color: #3498db;
+        background-color: #f8f9fa;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+    }
+
+    .bank-option i {
+        font-size: 24px;
+        color: #3498db;
+        margin-bottom: 8px;
+    }
+
+    .bank-option span {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+    }
+
+    .bank-option small {
+        font-size: 12px;
+        color: #666;
+        font-weight: normal;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .modal-container {
+        background-color: #fff;
+        width: 90%;
+        max-width: 600px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        animation: modal-fade-in 0.3s ease;
+    }
+
+    @keyframes modal-fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
         }
-
-        .step-title {
-            font-weight: 600;
-            font-size: 18px;
-            margin-bottom: 6px;
-            color: #333;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-        .step-description {
-            color: #666;
-            line-height: 1.5;
-        }
+    .modal-header {
+        background-color: #3498db;
+        color: white;
+        padding: 15px 20px;
+        font-size: 18px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        @media (max-width: 768px) {
-            .instruction-step {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
+    .modal-header i {
+        margin-right: 10px;
+    }
 
-            .step-icon {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-        }
+    .modal-content {
+        padding: 25px;
+    }
 
-        /* Contact Popup Styles */
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
+    .modal-content h3 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+    }
 
-        .popup-container {
-            background-color: #fff;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            animation: popup-fade-in 0.3s ease;
-        }
+    .modal-footer {
+        padding: 20px;
+        background-color: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
 
-        @keyframes popup-fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+    .modal-button {
+        padding: 12px 24px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .modal-button:hover:not(:disabled) {
+        background-color: #2980b9;
+    }
 
-        .popup-header {
-            background-color: #3498db;
-            color: white;
-            padding: 15px 20px;
-            font-size: 18px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .modal-button:disabled {
+        background-color: #bdc3c7;
+        cursor: not-allowed;
+    }
 
-        .popup-header i {
-            margin-right: 10px;
-        }
-
-        .popup-close {
-            font-size: 24px;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .popup-close:hover {
-            color: #f1f1f1;
-        }
-
-        .popup-content {
-            padding: 25px;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .contact-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            background-color: #3498db;
-            border-radius: 50%;
-            color: white;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-
-        .contact-icon i {
-            font-size: 18px;
-        }
-
-        .contact-details h3 {
-            font-size: 16px;
-            margin: 0 0 5px 0;
-            color: #333;
-        }
-
-        .contact-details p {
-            margin: 0;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        /* Bank Selection Modal Styles */
+    @media (max-width: 768px) {
         .bank-selection-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: 1fr;
         }
-
-        .bank-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            background-color: #fff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            min-height: 120px;
-            justify-content: center;
-        }
-
-        .bank-option:hover {
-            border-color: #3498db;
-            background-color: #f8f9fa;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
-        }
-
-        .bank-option i {
-            font-size: 24px;
-            color: #3498db;
-            margin-bottom: 8px;
-        }
-
-        .bank-option span {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .bank-option small {
-            font-size: 12px;
-            color: #666;
-            font-weight: normal;
-        }
-
-        /* Modal styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
+        
         .modal-container {
-            background-color: #fff;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            animation: modal-fade-in 0.3s ease;
+            width: 95%;
         }
-
-        @keyframes modal-fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
-            background-color: #3498db;
-            color: white;
-            padding: 15px 20px;
-            font-size: 18px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header i {
-            margin-right: 10px;
-        }
-
-        .modal-content {
-            padding: 25px;
-        }
-
-        .modal-content h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: #333;
-            text-align: center;
-        }
-
-        .modal-footer {
-            padding: 20px;
-            background-color: #f8f9fa;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .modal-button {
-            padding: 12px 24px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .modal-button:hover:not(:disabled) {
-            background-color: #2980b9;
-        }
-
-        .modal-button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-
-        @media (max-width: 768px) {
-            .bank-selection-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-container {
-                width: 95%;
-            }
-        }
+    }
     </style>
-
+    
     <!-- Bank Selection Modal -->
     <div id="bankSelectionModal" class="modal-overlay" style="display: flex;">
         <div class="modal-container">
@@ -589,13 +575,11 @@
                 <h3>1. Device Testing Terms</h3>
                 <p>By using this GPS8.0 Device Testing tool, you agree to the following terms and conditions:</p>
                 <ul>
-                    <li>This tool will collect device information including serial number, firmware version, and device
-                        status.</li>
-                    <li>GPS location coordinates will be captured and stored for quality control and device
-                        verification.</li>
+                    <li>This tool will collect device information including serial number, firmware version, and device status.</li>
+                    <li>GPS location coordinates will be captured and stored for quality control and device verification.</li>
                     <li>Test results and device performance data will be logged and stored for product improvement.</li>
                 </ul>
-
+                
                 <h3>2. Data Collection and Privacy</h3>
                 <p>We take your privacy seriously. The data we collect is used only for the following purposes:</p>
                 <ul>
@@ -604,17 +588,13 @@
                     <li>Technical support and troubleshooting</li>
                     <li>Warranty validation and device history tracking</li>
                 </ul>
-
+                
                 <h3>3. Data Security</h3>
-                <p>All collected data is securely stored in our protected database. We implement appropriate security
-                    measures to protect against unauthorized access, alteration, disclosure, or destruction of your
-                    personal information and device data.</p>
-
+                <p>All collected data is securely stored in our protected database. We implement appropriate security measures to protect against unauthorized access, alteration, disclosure, or destruction of your personal information and device data.</p>
+                
                 <h3>4. Data Retention</h3>
-                <p>Device test data is retained for a period necessary to fulfill the purposes outlined in this policy,
-                    typically for the duration of the product's expected lifecycle plus two years for warranty and
-                    support purposes.</p>
-
+                <p>Device test data is retained for a period necessary to fulfill the purposes outlined in this policy, typically for the duration of the product's expected lifecycle plus two years for warranty and support purposes.</p>
+                
             </div>
             <div class="modal-footer">
                 <label for="termsCheckbox">
@@ -636,24 +616,24 @@
         let isReceiving = false;
         let locationCheckInterval;
         let deviceInfoReceived = false;
-
+        
         // Test command information
         const COMMAND_DEVICE_INFO = "get_device_info";
         const COMMAND_LOCATION = "get_location";
         let currentCommand = null;
-
+        
         // Timing variables for progress bar
         const TOTAL_TEST_TIME = 10 * 60 * 1000; // 10 minutes in ms
         const ANTENNA_SUGGESTION_TIME = 3 * 60 * 1000; // 3 minutes in ms
         let testStartTime = 0;
         let progressInterval = null;
         let locationFound = false;
-
+        
         // API endpoint
         const API_ENDPOINT = 'device_api.php';
         let testDeviceSerialNumber = '';
         let currentTestId = ''; // Store the test ID received from the API
-
+        
         // Terms and conditions acceptance
         let termsAccepted = false;
 
@@ -664,54 +644,54 @@
                 showTermsModal();
             }
         }
-
+        
         // Show terms and conditions modal
         function showTermsModal() {
             document.getElementById('termsModal').style.display = 'flex';
             document.getElementById('connectButton').disabled = true;
         }
-
+        
         // Hide terms and conditions modal
         function hideTermsModal() {
             document.getElementById('termsModal').style.display = 'none';
             document.getElementById('connectButton').disabled = false;
         }
-
+        
         // Terms checkbox event listener
-        document.getElementById('termsCheckbox').addEventListener('change', function () {
+        document.getElementById('termsCheckbox').addEventListener('change', function() {
             document.getElementById('acceptTermsButton').disabled = !this.checked;
         });
-
+        
         // Accept terms button event listener
-        document.getElementById('acceptTermsButton').addEventListener('click', function () {
+        document.getElementById('acceptTermsButton').addEventListener('click', function() {
             termsAccepted = true;
             localStorage.setItem('gpsDeviceTermsAccepted', 'true');
             hideTermsModal();
         });
-
+        
         // Initialize page load functionality
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Show bank selection modal first
             showBankSelectionModal();
-
+            
             // Contact popup functionality
             const contactLink = document.getElementById('contactLink');
             const contactPopup = document.getElementById('contactPopup');
             const closeContactPopup = document.getElementById('closeContactPopup');
-
+            
             // Open popup when contact link is clicked
-            contactLink.addEventListener('click', function (e) {
+            contactLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 contactPopup.style.display = 'flex';
             });
-
+            
             // Close popup when X is clicked
-            closeContactPopup.addEventListener('click', function () {
+            closeContactPopup.addEventListener('click', function() {
                 contactPopup.style.display = 'none';
             });
-
+            
             // Close popup when clicking outside
-            contactPopup.addEventListener('click', function (e) {
+            contactPopup.addEventListener('click', function(e) {
                 if (e.target === contactPopup) {
                     contactPopup.style.display = 'none';
                 }
@@ -722,11 +702,11 @@
         function showBankSelectionModal() {
             const bankModal = document.getElementById('bankSelectionModal');
             bankModal.style.display = 'flex';
-
+            
             // Add event listeners to bank options
             const bankOptions = document.querySelectorAll('.bank-option');
             bankOptions.forEach(option => {
-                option.addEventListener('click', function () {
+                option.addEventListener('click', function() {
                     const bankType = this.getAttribute('data-bank');
                     handleBankSelection(bankType);
                 });
@@ -738,12 +718,12 @@
                 // Redirect to sbi.php
                 window.location.href = 'sbi.php';
             }
-
+            
             else if (bankType === 'bom') {
                 // Redirect to bom.php
                 window.location.href = 'bom.php';
             }
-
+            
             else {
                 // Hide bank selection modal and proceed with current page
                 hideBankSelectionModal();
@@ -762,7 +742,7 @@
                 showTermsModal();
                 return;
             }
-
+            
             try {
                 port = await navigator.serial.requestPort();
                 await port.open({ baudRate: 9600 });
@@ -772,10 +752,10 @@
 
                 toggleButtons(true);
                 updateStatus("Connected");
-
+                
                 // Clear previous results
                 clearResults();
-
+                
                 // Start continuous reading
                 readContinuously();
             } catch (err) {
@@ -787,7 +767,7 @@
             try {
                 stopLocationChecking();
                 stopProgressTracking();
-
+                
                 if (reader) {
                     await reader.cancel();
                     reader.releaseLock();
@@ -811,20 +791,20 @@
                 showTermsModal();
                 return;
             }
-
+            
             // Clear any previous results
             clearResults();
-
+            
             // Stop any existing location check and progress tracking
             stopLocationChecking();
             stopProgressTracking();
-
+            
             // Reset location found flag
             locationFound = false;
-
+            
             // Start the progress bar
             startProgressTracking();
-
+            
             // First get device info
             deviceInfoReceived = false;
             currentCommand = COMMAND_DEVICE_INFO;
@@ -836,11 +816,11 @@
             document.getElementById('disconnectButton').disabled = !connected;
             document.getElementById('runTestButton').disabled = !connected;
         }
-
+        
         function updateStatus(status) {
             const indicator = document.getElementById('statusIndicator');
             indicator.textContent = status;
-
+            
             if (status === 'Receiving' || status === 'Testing') {
                 indicator.classList.add('receiving');
             } else {
@@ -852,16 +832,16 @@
             try {
                 // Reset buffer for new command
                 buffer = [];
-
+                
                 const requestObj = { command, ...additionalParams };
                 const request = JSON.stringify(requestObj) + "\n";
-
+                
                 updateStatus('Sending');
-
+                
                 // Send request
                 await writer.write(encoder.encode(request));
                 updateStatus('Receiving');
-
+                
                 // Set a timeout to reset the status indicator
                 setTimeout(() => {
                     if (isReceiving) {
@@ -880,14 +860,14 @@
             try {
                 while (true) {
                     const { value, done } = await reader.read();
-
+                    
                     if (done) {
                         updateStatus("Disconnected");
                         break;
                     }
-
+                    
                     isReceiving = true;
-
+                    
                     // Process the received data byte by byte
                     processReceivedData(value);
                 }
@@ -907,7 +887,7 @@
             for (let i = 0; i < data.length; i++) {
                 buffer.push(data[i]);
             }
-
+            
             // Check for newline to indicate a complete message
             const newlineIndex = buffer.indexOf(10); // ASCII for '\n'
             if (newlineIndex !== -1) {
@@ -915,7 +895,7 @@
                 const message = buffer.slice(0, newlineIndex);
                 // Remove the processed message from the buffer
                 buffer = buffer.slice(newlineIndex + 1);
-
+                
                 // Process the message
                 processMessage(message);
             }
@@ -924,10 +904,10 @@
         function processMessage(messageBytes) {
             // Convert bytes to text
             const messageText = decoder.decode(new Uint8Array(messageBytes));
-
+            
             try {
                 const response = JSON.parse(messageText);
-
+                
                 // Process based on current command
                 if (currentCommand === COMMAND_DEVICE_INFO) {
                     handleDeviceInfoResponse(response);
@@ -938,17 +918,17 @@
                 // Not valid JSON
                 showError(`Received invalid response: ${messageText}`);
             }
-
+            
             // Reset state after processing
             updateStatus('Connected');
             isReceiving = false;
         }
-
+        
         function handleDeviceInfoResponse(response) {
             if (response.status === "success" && response.data) {
                 // Store the serial number for later API calls
                 testDeviceSerialNumber = response.data.serial_number || '';
-
+                
                 // Display device info
                 const deviceInfoSection = document.getElementById('deviceInfoSection');
                 deviceInfoSection.innerHTML = `
@@ -971,9 +951,9 @@
                         </div>
                     </div>
                 `;
-
+                
                 deviceInfoReceived = true;
-
+                
                 // Send device info to API
                 sendToAPI('test_started', {
                     serial_number: response.data.serial_number || 'unknown',
@@ -981,16 +961,16 @@
                     device_status: response.data.device_status || 'unknown',
                     test_start_time: new Date().toISOString()
                 });
-
+                
                 // Proceed to get location
                 currentCommand = COMMAND_LOCATION;
                 sendCommand(COMMAND_LOCATION);
-
+                
                 // Set up periodic location checking
                 startLocationChecking();
             } else {
                 showError(`Failed to get device info: ${response.message || 'Unknown error'}`);
-
+                
                 // Report failure to API if we have a serial number
                 if (testDeviceSerialNumber) {
                     sendToAPI('test_failed', {
@@ -1000,21 +980,21 @@
                         test_time: new Date().toISOString()
                     });
                 }
-
+                
                 stopProgressTracking();
             }
         }
-
+        
         function handleLocationResponse(response) {
             const locationInfoSection = document.getElementById('locationInfoSection');
-
+            
             // Check if we have valid coordinates (not 0.0000, 0.0000 which is invalid)
-            const hasValidLocation = response.status === "success" &&
-                response.data &&
-                response.data.latitude &&
-                !(parseFloat(response.data.latitude) === 0.0 && parseFloat(response.data.longitude) === 0.0);
-
-            if (hasValidLocation) {
+            const hasValidLocation = response.status === "success" && 
+                                   response.data && 
+                                   response.data.latitude && 
+                                   !(parseFloat(response.data.latitude) === 0.0 && parseFloat(response.data.longitude) === 0.0);
+            
+            if (hasValidLocation) { 
                 // Display location info
                 locationInfoSection.innerHTML = `
                     <div class="info-card">
@@ -1036,14 +1016,14 @@
                         </div>
                     </div>
                 `;
-
+                
                 // Mark location as found and hide antenna suggestion if visible
                 locationFound = true;
                 document.getElementById('timeAlertSection').classList.remove('visible');
-
+                
                 // Hide the progress bar when location is found
                 document.getElementById('progressBar').style.display = 'none';
-
+                
                 // Send location data to API
                 sendToAPI('gps_captured', {
                     serial_number: testDeviceSerialNumber,
@@ -1053,7 +1033,7 @@
                     accuracy: response.data.accuracy || 'unknown',
                     capture_time: new Date().toISOString()
                 });
-
+                
                 // Stop checking for location after success
                 stopLocationChecking();
                 stopProgressTracking();
@@ -1070,12 +1050,12 @@
                         </div>
                     </div>
                 `;
-
+                
                 // Make sure progress bar is visible while waiting
                 document.getElementById('progressBar').style.display = 'block';
             }
         }
-
+        
         function startLocationChecking() {
             // Check location every 5 seconds
             locationCheckInterval = setInterval(() => {
@@ -1084,43 +1064,43 @@
                 }
             }, 5000);
         }
-
+        
         function stopLocationChecking() {
             if (locationCheckInterval) {
                 clearInterval(locationCheckInterval);
                 locationCheckInterval = null;
             }
         }
-
+        
         function startProgressTracking() {
             // Initialize the start time
             testStartTime = Date.now();
             document.getElementById('progressFill').style.width = '0%';
-
+            
             // Make sure progress bar is visible when starting test
             document.getElementById('progressBar').style.display = 'block';
-
+            
             // Update the progress bar every second
             progressInterval = setInterval(() => {
                 const elapsedTime = Date.now() - testStartTime;
                 const progressPercent = Math.min(100, (elapsedTime / TOTAL_TEST_TIME) * 100);
-
+                
                 // Update progress bar
                 document.getElementById('progressFill').style.width = `${progressPercent}%`;
-
+                
                 // After 3 minutes, show antenna suggestion if location not found
                 if (elapsedTime >= ANTENNA_SUGGESTION_TIME && !locationFound) {
                     document.getElementById('timeAlertSection').classList.add('visible');
                 }
-
+                
                 // After 10 minutes, stop the test if location not found
                 if (elapsedTime >= TOTAL_TEST_TIME && !locationFound) {
                     stopLocationChecking();
                     stopProgressTracking();
-
+                    
                     const errorMsg = "Test timed out after 10 minutes. Please try again or check device placement for better GPS signal.";
                     showError(errorMsg);
-
+                    
                     // Report timeout to API
                     if (testDeviceSerialNumber) {
                         sendToAPI('test_failed', {
@@ -1133,14 +1113,14 @@
                 }
             }, 1000);
         }
-
+        
         function stopProgressTracking() {
             if (progressInterval) {
                 clearInterval(progressInterval);
                 progressInterval = null;
             }
         }
-
+        
         function clearResults() {
             document.getElementById('deviceInfoSection').innerHTML = '';
             document.getElementById('locationInfoSection').innerHTML = '';
@@ -1148,16 +1128,16 @@
             document.getElementById('timeAlertSection').classList.remove('visible');
             document.getElementById('progressFill').style.width = '0%';
         }
-
+        
         function showError(message) {
             const errorSection = document.getElementById('errorSection');
             errorSection.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> ${message}</div>`;
-
+            
             // Also stop progress and location checking on error
             stopLocationChecking();
             stopProgressTracking();
         }
-
+        
         // Function to send data to the API
         async function sendToAPI(action, data) {
             try {
@@ -1165,7 +1145,7 @@
                     action: action,
                     ...data
                 };
-
+                
                 const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
                     headers: {
@@ -1173,9 +1153,9 @@
                     },
                     body: JSON.stringify(payload)
                 });
-
+                
                 const result = await response.json();
-
+                
                 if (result.status !== 'success') {
                     console.error('API Error:', result.message);
                 } else {
@@ -1185,7 +1165,7 @@
                         console.log('Test ID assigned:', currentTestId);
                     }
                 }
-
+                
                 return result;
             } catch (error) {
                 console.error('Error sending data to API:', error);
@@ -1195,14 +1175,13 @@
     </script>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VZFRLDJFJ7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VZFRLDJFJ7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-        gtag('config', 'G-VZFRLDJFJ7');
-    </script>
+  gtag('config', 'G-VZFRLDJFJ7');
+</script>
 </body>
-
 </html>
