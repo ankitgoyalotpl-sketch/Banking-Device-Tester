@@ -181,7 +181,7 @@ function App() {
           <Route path="/tester/:bank?" element={<TesterPage />} />
           <Route path="/complaint" element={<ComplaintPage />} />
           <Route path="/status" element={<StatusPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin-portal" element={<AdminPage />} />
         </Routes>
       </main>
 

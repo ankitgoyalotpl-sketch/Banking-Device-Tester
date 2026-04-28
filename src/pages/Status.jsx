@@ -86,13 +86,6 @@ const StatusPage = () => {
                             <span style={{ color: 'var(--text-muted)' }}>Estimated Resolution</span>
                             <span>{new Date(result.estimated_resolution).toLocaleDateString()}</span>
                         </div>
-
-                        {result.resolution_message && (
-                            <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(34, 197, 94, 0.1)', borderLeft: '4px solid var(--success)', borderRadius: '4px' }}>
-                                <div style={{ fontWeight: 'bold', fontSize: '0.8rem', color: 'var(--success)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Owner's Response:</div>
-                                <div style={{ color: 'var(--text-light)', fontStyle: 'italic' }}>"{result.resolution_message}"</div>
-                            </div>
-                        )}
                     </div>
                 </div>
             )}
