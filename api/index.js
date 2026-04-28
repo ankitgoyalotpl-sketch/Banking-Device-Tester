@@ -9,15 +9,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection
+// MongoDB Connection (Optimized for Serverless)
 const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-    console.error('MONGODB_URI is not defined in environment variables');
-}
+let isConnected = false;
 
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('Connected to MongoDB Atlas'))
-    .catch(err => console.error('MongoDB connection error:', err));
+const connectDB = async () => {
+    if (isConnected) return;
+    try {
+        await mongoose.connect(MONGODB_URI);
+        isConnected = true;
+        console.log('Connected to MongoDB Atlas');
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
+    }
+};
+
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+    await connectDB();
+    next();
+});
 
 // Complaint Schema
 const complaintSchema = new mongoose.Schema({
