@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Terminal, ShieldAlert, CheckCircle2, AlertCircle, Loader2, Navigation, Activity, Cpu, Info, Usb, Plug2, List, PlayCircle, Plug } from 'lucide-react';
+import { Terminal, ShieldAlert, CheckCircle2, AlertCircle, Loader2, Navigation, Activity, Cpu, Info, Usb, Plug2, List, PlayCircle, Plug, Lock, ShieldCheck } from 'lucide-react';
 
 const TOTAL_TEST_TIME = 10 * 60 * 1000;
 const ANTENNA_SUGGESTION_TIME = 3 * 60 * 1000;
 const API_ENDPOINT = '/api/device';
+const DECRYPT_ENDPOINT = '/api/decrypt';
 const SBI_MAGIC_STRING = "ID0BMDQD5CpCxCtCmByBsBKD7C2CpCwCJDMD6BECVBgCbC6CbCsBPCDDzByCsCKDCDQDPDZChCaBACqBCCDC8BKC1BACMCOCNCECVBoCpC0ChC1CLD7C3CrCrBOCOCPCGCpBzBwB4BrB8BHCwBzBnCuC3CODOD5CYC1CaBACoB4BKC8BSDFD";
+
+const STATUS = {
+    DISCONNECTED: 'Disconnected',
+    CONNECTED: 'Connected',
+    RECEIVING: 'Receiving',
+    DISCONNECTING: 'Disconnecting...',
+    LOCKING: 'Locking...'
+};
 
 const TesterPage = () => {
     const { bank } = useParams();
@@ -18,11 +27,12 @@ const TesterPage = () => {
     const [showTerms, setShowTerms] = useState(false);
     const [termsChecked, setTermsChecked] = useState(false);
 
-    const [status, setStatus] = useState('Disconnected');
+    const [status, setStatus] = useState(STATUS.DISCONNECTED);
     const [deviceInfo, setDeviceInfo] = useState(null);
     const [locationInfo, setLocationInfo] = useState(null);
     const [error, setError] = useState(null);
     const [sbiIssueStatus, setSbiIssueStatus] = useState(null);
+    const [lockStatus, setLockStatus] = useState(null);
     const [networkStatus, setNetworkStatus] = useState(null);
     const [debugText, setDebugText] = useState("");
     
@@ -42,6 +52,8 @@ const TesterPage = () => {
     const networkTimeoutRef = useRef(null);
     const networkStatusRef = useRef(null);
     const bufferRef = useRef([]);
+    const sbiIssueStatusRef = useRef(null);
+    const lockStatusRef = useRef(null);
 
     useEffect(() => {
         if (!bank) {
@@ -70,9 +82,18 @@ const TesterPage = () => {
             networkTimeoutRef.current = null;
         }
         try {
+            if (bank === 'sbi' && writerRef.current && sbiIssueStatusRef.current === 'Success') {
+                // Restore encryption before closing just in case
+                await writerRef.current.write(new TextEncoder().encode(JSON.stringify({ command: 'enable_encryption' }) + "\n"));
+                await new Promise(r => setTimeout(r, 200));
+            }
             if (readerRef.current) {
-                await readerRef.current.cancel();
-                readerRef.current.releaseLock();
+                try {
+                    await readerRef.current.cancel();
+                    readerRef.current.releaseLock();
+                } catch (e) {
+                    console.log("Reader cleanup warning:", e.message);
+                }
                 readerRef.current = null;
             }
             if (writerRef.current) {
@@ -130,6 +151,7 @@ const TesterPage = () => {
             setDeviceInfo(null);
             setLocationInfo(null);
             setSbiIssueStatus(null);
+            sbiIssueStatusRef.current = null;
             setNetworkStatus(null);
             networkStatusRef.current = null;
             setDebugText("");
@@ -142,15 +164,37 @@ const TesterPage = () => {
         }
     };
 
+    const handleStopAndSecure = async () => {
+        // Trigger the full safe disconnect logic
+        await handleDisconnect();
+    };
+
     const handleDisconnect = async () => {
+        // Only attempt safe disconnect (relock) if we successfully verified and unlocked an SBI device
+        if (bank === 'sbi' && status === STATUS.CONNECTED && sbiIssueStatusRef.current === 'Success') {
+            try {
+                setStatus(STATUS.DISCONNECTING);
+                currentCommandRef.current = 'safe_disconnect';
+                await sendCommand('enable_encryption');
+                
+                // Safety timeout: if device doesn't respond in 3s, force close
+                setTimeout(() => {
+                    if (portRef.current) cleanup();
+                }, 3000);
+                return;
+            } catch (err) {
+                console.error("Safe disconnect failed:", err);
+            }
+        }
         await cleanup();
+        setStatus(STATUS.DISCONNECTED);
         setDeviceInfo(null);
         setLocationInfo(null);
         setSbiIssueStatus(null);
+        setLockStatus(null);
         setNetworkStatus(null);
         networkStatusRef.current = null;
         setDebugText("");
-        setStatus('Disconnected');
     };
 
     const sendCommand = async (command, additionalParams = {}) => {
@@ -158,10 +202,10 @@ const TesterPage = () => {
             bufferRef.current = [];
             const req = JSON.stringify({ command, ...additionalParams }) + "\n";
             await writerRef.current.write(new TextEncoder().encode(req));
-            setStatus('Connected');
+            setStatus(STATUS.CONNECTED);
         } catch (err) {
             setError(`Command Error: ${err.message}`);
-            setStatus('Error');
+            setStatus(STATUS.DISCONNECTED);
         }
     };
 
@@ -169,14 +213,12 @@ const TesterPage = () => {
         try {
             bufferRef.current = [];
             await writerRef.current.write(new TextEncoder().encode(rawStr + "\n"));
-            setStatus('Connected');
+            setStatus(STATUS.CONNECTED);
         } catch (err) {
             setError(`Command Error: ${err.message}`);
-            setStatus('Error');
+            setStatus(STATUS.DISCONNECTED);
         }
     };
-
-    // Network polling is completely incompatible with SBI firmware. Only applicable for json/NMEA compliant architectures.
 
     const handleRunTest = async () => {
         if (!termsAccepted) return;
@@ -184,6 +226,7 @@ const TesterPage = () => {
         setLocationInfo(null);
         setError(null);
         setSbiIssueStatus(null);
+        sbiIssueStatusRef.current = null;
         setNetworkStatus(null);
         networkStatusRef.current = null;
         setShowTimeAlert(false);
@@ -196,12 +239,15 @@ const TesterPage = () => {
         if (bank === 'sbi') {
             currentCommandRef.current = 'sbi_issue';
             setSbiIssueStatus('Pending');
+            sbiIssueStatusRef.current = 'Pending';
             await sendRawCommand(SBI_MAGIC_STRING);
         } else {
             currentCommandRef.current = 'get_device_info';
             await sendCommand('get_device_info');
         }
     };
+
+    const sbiBufferTimeoutRef = useRef(null);
 
     const readContinuously = async () => {
         try {
@@ -211,28 +257,40 @@ const TesterPage = () => {
                 if (done) break;
                 
                 const newBuffer = [...bufferRef.current, ...value];
-                const newlineIndex = newBuffer.indexOf(10); // ASCII \\n
                 
-                if (newlineIndex !== -1) {
-                    const msgBytes = newBuffer.slice(0, newlineIndex);
-                    bufferRef.current = newBuffer.slice(newlineIndex + 1);
-                    processMessage(msgBytes);
-                } else if (currentCommandRef.current === 'sbi_issue' && newBuffer.length > 20 && networkStatusRef.current !== 'Checking') {
-                    bufferRef.current = [];
-                    processMessage(newBuffer);
-                } else if (newBuffer.length > 1000) {
-                    bufferRef.current = []; // Prevent infinite memory accumulation loop if missing newlines
-                    processMessage(newBuffer);
-                } else {
+                if (bank === 'sbi') {
                     bufferRef.current = newBuffer;
+                    if (!sbiBufferTimeoutRef.current) {
+                        sbiBufferTimeoutRef.current = setTimeout(() => {
+                            if (bufferRef.current.length > 0) {
+                                const fullMsg = new Uint8Array(bufferRef.current);
+                                bufferRef.current = [];
+                                processMessageBytes(fullMsg);
+                            }
+                            sbiBufferTimeoutRef.current = null;
+                        }, 200);
+                    }
+                } else {
+                    const newlineIndex = newBuffer.indexOf(10);
+                    if (newlineIndex !== -1) {
+                        const msgBytes = newBuffer.slice(0, newlineIndex);
+                        bufferRef.current = newBuffer.slice(newlineIndex + 1);
+                        processMessageBytes(msgBytes);
+                    } else if (newBuffer.length > 2000) {
+                        bufferRef.current = [];
+                        processMessageBytes(newBuffer);
+                    } else {
+                        bufferRef.current = newBuffer;
+                    }
                 }
             }
         } catch (err) {
             if (portRef.current) {
                 setError(`Read Error: The device has been lost or disconnected.`);
             }
-            setStatus('Disconnected');
+            setStatus(STATUS.DISCONNECTED);
             setSbiIssueStatus(null);
+            sbiIssueStatusRef.current = null;
             cleanup();
         } finally {
             if (readerRef.current) {
@@ -243,32 +301,82 @@ const TesterPage = () => {
 
     const processMessageBytes = (bytes) => {
         const text = new TextDecoder().decode(new Uint8Array(bytes));
+        const trimmedText = text.trim();
+
+        // 1. Cross-Hardware Detection (Safety First)
+        if (bank !== 'sbi' && (trimmedText.startsWith('ID0B') || (trimmedText.length > 100 && !trimmedText.startsWith('{')))) {
+            setError("Hardware Mismatch: This is an SBI device. Please use the SBI Tester.");
+            stopProgressTracking();
+            cleanup();
+            return;
+        }
         
         if (currentCommandRef.current === 'sbi_issue') {
-            if (text.includes("ID0B") || text.includes("BMDQ") || text.includes("Success")) {
-                if (sbiIssueStatus !== 'Success') {
+            if (text.includes("ID0B") || text.includes("BMDQ")) {
+                if (sbiIssueStatusRef.current !== 'Success') {
                     setSbiIssueStatus('Success');
-                    // SBI device purely acts as an encrypted dongle; no further commands/polling supported.
-                } else if (networkStatusRef.current === 'Checking') {
-                    if (text.length > 35 || text.includes("Success")) {
-                        setNetworkStatus('Detected');
-                        networkStatusRef.current = 'Detected';
-                        if (networkTimeoutRef.current) clearTimeout(networkTimeoutRef.current);
-                    }
+                    sbiIssueStatusRef.current = 'Success';
+                    // Step 2: One-time unlock for fast polling
+                    currentCommandRef.current = 'disable_encryption';
+                    setTimeout(() => sendCommand('disable_encryption'), 2000);
                 }
                 return;
             }
         }
 
+        if (currentCommandRef.current === 'disable_encryption') {
+            if (text.includes("success") || text.includes("disabled")) {
+                setLockStatus('Unsecured');
+                lockStatusRef.current = 'Unsecured';
+                currentCommandRef.current = 'get_device_info';
+                setTimeout(() => sendCommand('get_device_info'), 1000);
+            }
+            return;
+        }
+
         try {
-            const dataObj = JSON.parse(text.trim());
+            const trimmedText = text.trim();
+            // Priority: Check for encryption status messages first (plaintext, JSON, or Magic String)
+            const lowText = trimmedText.toLowerCase();
+            const isMagicString = trimmedText.startsWith('ID0B');
             
-            // Hardware Lock: Prevent BOB JSON configs from parsing on other banking portals
-            if (bank !== 'bob' && dataObj && dataObj.data && dataObj.data.serial_number) {
-                setError(`Hardware Mismatch: Please use the official BOB portal for this device.`);
+            if (lowText.includes("encryption enabled") || lowText.includes("encryption_enabled\":true") || (lowText.includes("success") && lowText.includes("encryption")) || isMagicString) {
+                if (lockStatusRef.current !== 'Encrypted') {
+                    setLockStatus('Encrypted');
+                    lockStatusRef.current = 'Encrypted';
+                    if (currentCommandRef.current === 'safe_disconnect') {
+                        cleanup();
+                        setStatus(STATUS.DISCONNECTED);
+                    }
+                }
+                if (isMagicString) return; // Don't try to parse magic string as JSON
+            }
+
+            if (bank === 'sbi' && trimmedText.length > 50 && (trimmedText.startsWith('ID0B') || !trimmedText.startsWith('{'))) {
+                handleEncryptedSbiData(trimmedText);
+                return;
+            }
+
+            const dataObj = JSON.parse(trimmedText);
+
+            // 2. Data-level Mismatch Detection
+            if (dataObj) {
+                if (bank === 'sbi' && sbiIssueStatusRef.current !== 'Success') {
+                     // If we are on the SBI page but receiving plaintext JSON without having 
+                     // successfully completed the SBI magic string unlock flow, it's behaving as a BOB device.
+                     setError("Hardware Mismatch: This is a BOB device. Please use the BOB Tester.");
+                     stopProgressTracking();
+                     cleanup();
+                     return;
+                }
+            }
+
+            if (bank !== 'bob' && bank !== 'sbi' && dataObj && dataObj.data && dataObj.data.serial_number) {
+                setError(`Hardware Mismatch: Please use the official ${bank.toUpperCase()} portal for this device.`);
                 stopProgressTracking();
                 setDeviceInfo(null);
                 setSbiIssueStatus(null);
+                sbiIssueStatusRef.current = null;
                 return;
             }
 
@@ -279,9 +387,7 @@ const TesterPage = () => {
             }
         } catch (e) {
             if (bank === 'sbi' && !text.trim().startsWith('{')) {
-                console.log("Ignored non-json string for SBI trailing chunk:", text);
-                
-                // Background Poller block removed due to hardware incompatibility.
+                handleEncryptedSbiData(text.trim());
                 return;
             }
             setError(`Invalid Response: ${text}`);
@@ -289,8 +395,30 @@ const TesterPage = () => {
         }
     };
 
-    // Forward definition to match React's hooks scope better
+    const handleEncryptedSbiData = async (encryptedData) => {
+        try {
+            const cleanedData = encryptedData.replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9=]+$/g, '');
+            const res = await fetch(DECRYPT_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ encrypted_data: cleanedData })
+            });
+            const decrypted = await res.json();
+            
+            if (decrypted.status === 'success' && decrypted.data) {
+                if (currentCommandRef.current === 'get_device_info' || !deviceInfo) {
+                    handleDeviceInfo(decrypted);
+                } else {
+                    handleLocation(decrypted);
+                }
+            }
+        } catch (err) {
+            console.error("Decryption Error:", err);
+        }
+    };
+
     const processMessage = processMessageBytes;
+
 
     const handleDeviceInfo = (response) => {
         if (response.status === 'success' && response.data) {
@@ -301,17 +429,6 @@ const TesterPage = () => {
                 firmware_version: response.data.firmware_version || 'unknown',
                 device_status: response.data.device_status || 'unknown'
             });
-
-            if (bank === 'sbi') {
-                setProgress(100);
-                stopProgressTracking();
-                sendToAPI('test_completed', {
-                    serial_number: serialNumRef.current,
-                    status: 'success_sbi',
-                    message: 'SBI Testing done correctly (skipping GPS)'
-                });
-                return;
-            }
 
             currentCommandRef.current = 'get_location';
             sendCommand('get_location');
@@ -328,6 +445,7 @@ const TesterPage = () => {
             }
             stopProgressTracking();
         }
+
     };
 
     const handleLocation = (response) => {
@@ -336,18 +454,21 @@ const TesterPage = () => {
             
         if (isValid) {
             setLocationInfo(response.data);
-            
-            if (networkStatusRef.current === 'Checking') {
-                setNetworkStatus('Detected');
-                networkStatusRef.current = 'Detected';
-                setDebugText("");
-                if (networkTimeoutRef.current) clearTimeout(networkTimeoutRef.current);
-            }
-            
             setShowTimeAlert(false);
+            if (locationIntervalRef.current) clearInterval(locationIntervalRef.current);
             stopLocationChecking();
             stopProgressTracking();
             
+            // Re-lock SBI device after successful test
+            if (bank === 'sbi') {
+                setLockStatus('Locking...');
+                currentCommandRef.current = 'sbi_lock';
+                sendCommand('enable_encryption');
+                // Fallback: If device doesn't confirm in 4s, set to Encrypted anyway
+                setTimeout(() => {
+                    setLockStatus(prev => prev === 'Locking...' ? 'Encrypted' : prev);
+                }, 4000);
+            }
             sendToAPI('gps_captured', {
                 serial_number: serialNumRef.current,
                 test_id: testIdRef.current,
@@ -384,7 +505,7 @@ const TesterPage = () => {
         if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
     };
 
-    const isConnected = status !== 'Disconnected';
+    const isConnected = status !== STATUS.DISCONNECTED;
 
     return (
         <div className="container" style={{ maxWidth: '900px' }}>
@@ -411,6 +532,52 @@ const TesterPage = () => {
                 </div>
             </div>
 
+            {lockStatus === 'Unsecured' && (
+                <div style={{ 
+                    marginBottom: '2rem', 
+                    padding: '1.25rem', 
+                    background: 'rgba(239, 68, 68, 0.15)', 
+                    borderRadius: '12px', 
+                    border: '2px solid #ef4444', 
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    gap: '1rem',
+                    animation: 'pulseGlow 2s infinite',
+                    boxShadow: '0 0 30px rgba(239, 68, 68, 0.2)'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        <ShieldAlert size={32} color="#ef4444" />
+                        <div>
+                            <div style={{ color: '#ef4444', fontWeight: 900, fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                CRITICAL WARNING: DEVICE UNSECURED
+                            </div>
+                            <div style={{ color: '#fca5a5', fontSize: '1rem', fontWeight: 600 }}>
+                                DO NOT DISCONNECT CABLE - Permanent hardware damage or corruption may occur.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button 
+                        onClick={handleStopAndSecure}
+                        className="btn btn-danger"
+                        style={{ 
+                            width: '100%', 
+                            padding: '1rem', 
+                            fontWeight: 900, 
+                            fontSize: '1.1rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '10px',
+                            boxShadow: '0 0 20px rgba(239, 68, 68, 0.4)',
+                            transition: 'all 0.3s'
+                        }}
+                    >
+                        <Lock size={20} /> STOP & SECURE DEVICE NOW
+                    </button>
+                </div>
+            )}
+
             <div style={{ display: 'grid', gap: '2rem', gridTemplateColumns: '1fr' }}>
                 
                 {/* Control Panel */}
@@ -436,7 +603,7 @@ const TesterPage = () => {
                 </div>
 
                 {/* Progress / Status Area */}
-                {(bank !== 'sbi' && progress > 0 && progress < 100 && !locationInfo && !error) && (
+                {(progress > 0 && progress < 100 && !locationInfo && !error) && (
                     <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'center', justifyContent: 'center' }}>
                         <div className="radar-dot" style={{ transform: 'scale(1.5)', margin: '1rem' }}></div>
                         <div style={{ width: '100%', background: 'var(--bg-dark)', height: '6px', borderRadius: '4px', overflow: 'hidden' }}>
@@ -484,6 +651,18 @@ const TesterPage = () => {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center' }}><span style={{ color: 'var(--text-light)', width: '150px', fontWeight: 600, fontSize: '0.95rem' }}>Status:</span><span style={{ color: 'var(--text-muted)' }}>Success</span></div>
                             <div style={{ display: 'flex', alignItems: 'center' }}><span style={{ color: 'var(--text-light)', width: '150px', fontWeight: 600, fontSize: '0.95rem' }}>Result:</span><span style={{ color: 'var(--text-muted)' }}>Command executed successfully</span></div>
+                            {lockStatus === 'Encrypted' && (
+                                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(34, 197, 94, 0.1)', padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(34, 197, 94, 0.2)', width: 'fit-content' }}>
+                                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--success)', boxShadow: '0 0 10px var(--success)' }}></div>
+                                    <span style={{ color: 'var(--success)', fontWeight: 600, fontSize: '0.9rem' }}>Hardware Re-Locked & Secured - You can now safely disconnect</span>
+                                </div>
+                            )}
+                            {lockStatus === 'Locking...' && (
+                                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(59, 130, 246, 0.1)', padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(59, 130, 246, 0.2)', width: 'fit-content' }}>
+                                    <Loader2 size={16} className="animate-spin" color="#3b82f6" />
+                                    <span style={{ color: '#93c5fd', fontWeight: 600, fontSize: '0.85rem' }}>Securing Hardware... Please Wait</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

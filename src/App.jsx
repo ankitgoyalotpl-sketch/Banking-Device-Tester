@@ -5,6 +5,7 @@ import TesterPage from './pages/Tester';
 import ComplaintPage from './pages/Complaint';
 import StatusPage from './pages/Status';
 import AdminPage from './pages/Admin';
+import ConverterPage from './pages/Converter';
 import React, { useState, useEffect } from 'react';
 
 const SmartLogo = ({ src }) => {
@@ -182,6 +183,7 @@ function App() {
           <Route path="/complaint" element={<ComplaintPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/admin-portal" element={<AdminPage />} />
+          <Route path="/converter-portal" element={<ConverterPage />} />
         </Routes>
       </main>
 

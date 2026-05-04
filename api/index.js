@@ -124,4 +124,31 @@ app.get('/api/admin/complaints', async (req, res) => {
     }
 });
 
+// Decryption Proxy Route
+app.post('/api/decrypt', async (req, res) => {
+    try {
+        const { encrypted_data } = req.body;
+        console.log('--- Decryption Request ---');
+        console.log('Encrypted Data Length:', encrypted_data?.length);
+
+        if (!encrypted_data) {
+            return res.status(400).json({ status: 'error', message: 'No encrypted data provided' });
+        }
+
+        const response = await fetch('https://help.bankingdevice.com/manual-decrypt.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ encrypted_data })
+        });
+
+        const data = await response.json();
+        console.log('Original Server Response Status:', response.status);
+        console.log('Decrypted Content:', JSON.stringify(data));
+        res.json(data);
+    } catch (err) {
+        console.error('Decryption Proxy Error:', err);
+        res.status(500).json({ status: 'error', message: 'Decryption failed at proxy' });
+    }
+});
+
 export default app;
